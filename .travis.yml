@@ -9,7 +9,6 @@ install:
   - composer require satooshi/php-coveralls:~0.6@stable 
 
 before_script:
-  - composer self-update
   - composer install --prefer-source --no-interaction --dev
   - mkdir -p build/logs
 
