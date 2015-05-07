@@ -5,15 +5,18 @@ php:
   - 5.5
   - 5.6
 
+before_install:
+  - php composer.phar self-update
+
 install:
-  - composer require satooshi/php-coveralls:~0.6@stable 
+  - php composer.phar require satooshi/php-coveralls:~0.6@stable 
 
 before_script:
-  - composer install --prefer-source --no-interaction --dev
+  - php composer.phar install --prefer-source --no-interaction --dev
   - mkdir -p build/logs
 
 script: 
-  - phpunit --coverage-clover build/logs/clover.xml
+  - php phpunit.phar --coverage-clover build/logs/clover.xml
 
 after_success:
   - php vendor/bin/coveralls -v
