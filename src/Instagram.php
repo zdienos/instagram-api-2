@@ -5,9 +5,9 @@ namespace Ismailcaakir\Inspublic;
 class Instagram
 {
   
-  public function hasCheese($bool = true)
+  public function hasChsseese()
   {
-      echo "test";
+      echo "tesst";
   }
 
 }
