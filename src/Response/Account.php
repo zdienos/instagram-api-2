@@ -8,7 +8,7 @@
 
 namespace Ismailcaakir\Inspublic\Response;
 
-use Ismailcaakir\Inspublic\Response\Media as MediaResponse;
+use Ismailcaakir\Inspublic\Response\MediaItem as MediaItemResponse;
 
 /**
  * Class Account
@@ -84,7 +84,7 @@ class Account extends Response
                 foreach ($mediaData as $index => $media)
                 {
                     /** @var Media $this->timeline_media[$index] */
-                    $this->timeline_media[$index] = new MediaResponse($media->node);
+                    $this->timeline_media[$index] = new MediaItemResponse($media->node);
                 }
 
 
@@ -262,12 +262,5 @@ class Account extends Response
         return $this->timeline_media;
     }
 
-
-
-
-    public function numberFormated()
-    {
-
-    }
 
 }

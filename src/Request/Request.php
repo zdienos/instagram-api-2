@@ -16,6 +16,8 @@ class Request
 
     const INSTAGRAM_PUBLIC_PARAM = "?__a=1";
 
+    const INSTAGRAM_QUERY_VAL   = 17888483320059182;
+
     /**
      * Request constructor.
      */

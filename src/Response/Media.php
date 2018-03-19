@@ -2,231 +2,88 @@
 /**
  * Created by PhpStorm.
  * User: ismail
- * Date: 17.03.2018
- * Time: 21:41
+ * Date: 18.03.2018
+ * Time: 02:04
  */
 
 namespace Ismailcaakir\Inspublic\Response;
 
 
-class Media
+class Media extends Response
 {
 
-    protected $__typename = null;
-    protected $id = null;
-    protected $caption = null;
-    protected $shortcode = null;
-    protected $comment_count = null;
-    protected $comments_disabled = null;
-    protected $timestamp = null;
-    protected $display_url = null;
-    protected $liked_count = null;
-    protected $thumbnail_small = null;
-    protected $thumbnail_medium = null;
-    protected $thumbnail_normal = null;
-    protected $thumbnail_large = null;
-    protected $thumbnail_xlarge = null;
-    protected $is_video = null;
-    protected $video_view_count = null;
+    protected $media_count = null;
+
+    protected $has_next_page = false;
+
+    protected $next_max_id = null;
+
+    protected $items = array();
+
 
     /**
      * Media constructor.
      */
-    public function __construct($item)
+    public function __construct($data)
     {
-
-//        var_dump($item);
-        $this->__typename = $item->__typename;
-        $this->id = $item->id;
-        $this->shortcode = $item->shortcode;
-        $this->comment_count = $item->edge_media_to_comment->count;
-        $this->comments_disabled = $item->comments_disabled;
-        $this->timestamp = $item->taken_at_timestamp;
-        $this->display_url = $item->display_url;
-        $this->liked_count = $item->edge_liked_by->count;
-        $this->dimensionH = $item->dimensions->height;
-        $this->dimensionW = $item->dimensions->width;
-
-        if (isset($item->edge_media_to_caption->edges[0]))
+        if(is_null($data))
         {
-            $this->caption = $item->edge_media_to_caption->edges[0]->node->text;
+            throw new \Exception("Data is null");
         }
 
-        if (isset($item->thumbnail_resources[0]))
+
+        $mediaData = $data->data->user->edge_owner_to_timeline_media;
+
+        $this->media_count = $mediaData->count;
+
+        if (isset($mediaData->page_info->has_next_page))
         {
-            $this->thumbnail_small  = $item->thumbnail_resources[0]->src;
+            $this->has_next_page = $mediaData->page_info->has_next_page;
         }
 
-        if (isset($item->thumbnail_resources[1]))
+        if (isset($mediaData->page_info->end_cursor))
         {
-            $this->thumbnail_medium = $item->thumbnail_resources[1]->src;
+            $this->next_max_id = $mediaData->page_info->end_cursor;
         }
 
-        if (isset($item->thumbnail_resources[2]))
+        foreach ($mediaData->edges as $index => $item)
         {
-            $this->thumbnail_normal = $item->thumbnail_resources[2]->src;
-        }
-
-        if (isset($item->thumbnail_resources[3]))
-        {
-            $this->thumbnail_large = $item->thumbnail_resources[3]->src;
-        }
-
-        if (isset($item->thumbnail_resources[5]))
-        {
-            $this->thumbnail_xlarge  = $item->thumbnail_resources[5]->src;
-        }
-
-        $this->is_video = $item->is_video;
-
-        if ($this->getIsVideo())
-        {
-            $this->video_view_count = $item->video_view_count;
+            $this->items[$index] = new MediaItem($item->node);
         }
 
     }
 
+
     /**
-     * @return mixed
+     * @return null
      */
-    public function getDimensionH()
+    public function getMediaCount()
     {
-        return $this->dimensionH;
+        return $this->media_count;
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getDimensionW()
+    public function isHasNextPage()
     {
-        return $this->dimensionW;
+        return $this->has_next_page;
     }
 
     /**
      * @return null
      */
-    public function getThumbnailXlarge()
+    public function getNextMaxId()
     {
-        return $this->thumbnail_xlarge;
+        return $this->next_max_id;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getTypename()
+    public function getItems()
     {
-        return $this->__typename;
+        return $this->items;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCaption()
-    {
-        return $this->caption;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCommentCount()
-    {
-        return $this->comment_count;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCommentsDisabled()
-    {
-        return $this->comments_disabled;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDisplayUrl()
-    {
-        return $this->display_url;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIsVideo()
-    {
-        return $this->is_video;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getLikedCount()
-    {
-        return $this->liked_count;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getShortcode()
-    {
-        return $this->shortcode;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getThumbnailLarge()
-    {
-        return $this->thumbnail_large;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getThumbnailMedium()
-    {
-        return $this->thumbnail_medium;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getThumbnailNormal()
-    {
-        return $this->thumbnail_normal;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getThumbnailSmall()
-    {
-        return $this->thumbnail_small;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTimestamp()
-    {
-        return $this->timestamp;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getVideoViewCount()
-    {
-        return $this->video_view_count;
-    }
 }
