@@ -25,17 +25,24 @@ class Instagram
     /** CACHE MEDIA TYPE STRING */
     const CACHE_MEDIA_TYPE  = "media";
 
+    /** CACHE TAG TYPE STRING */
+    const CACHE_TAG_TYPE  = "tag";
+
+    /** CACHE ALLMEDIA TYPE STRING */
+    const CACHE_ALL_MEDIA_TYPE  = "allmedia";
+
+    /** CACHE DEFAULT TYPE STRING */
+    const CACHE_DEFAULT_TYPE  = "default";
+
 
     /**
      * Instagram constructor.
      */
     public function __construct()
     {
-
         $this->_requestAccount = new RequestAccount();
         $this->_requestMedia = new RequestMedia();
         $this->_cache = new Cache();
-
     }
 
     /**
@@ -86,13 +93,29 @@ class Instagram
         }
 
         $mediaLimit = 20;
-        /**
-         * Set by Instagram account username
-         */
-        $this->_requestAccount->setUsername($username);
 
-        /** @var  ResponseAccount $account */
-        $account = new ResponseAccount($this->_requestAccount->get());
+        if ($this->_cacheEnable && $this->_cache->has($username,self::CACHE_USER_TYPE))
+        {
+            $account = new ResponseAccount($this->_cache->get($username,self::CACHE_USER_TYPE));
+        } else {
+
+            /**
+             * Set by Instagram account username
+             */
+            $this->_requestAccount->setUsername($username);
+
+            /** @var  ResponseAccount $account */
+            $accountData = $this->_requestAccount->get();
+
+            if ($this->_cacheEnable)
+            {
+                $this->_cache->set($username,$accountData,self::CACHE_USER_TYPE);
+            }
+
+            $account = new ResponseAccount($accountData);
+        }
+
+
 
         /**
          * Set by Instagram account media paramaters
@@ -117,14 +140,28 @@ class Instagram
             throw new \Exception("Username is null");
         }
 
-        $mediaLimit = 50;
-        /**
-         * Set by Instagram account username
-         */
-        $this->_requestAccount->setUsername($username);
+        $mediaLimit = 200;
 
-        /** @var  ResponseAccount $account */
-        $account = new ResponseAccount($this->_requestAccount->get());
+        if ($this->_cacheEnable && $this->_cache->has($username,self::CACHE_USER_TYPE))
+        {
+            $account = new ResponseAccount($this->_cache->get($username,self::CACHE_USER_TYPE));
+        } else {
+
+            /**
+             * Set by Instagram account username
+             */
+            $this->_requestAccount->setUsername($username);
+
+            /** @var  ResponseAccount $account */
+            $accountData = $this->_requestAccount->get();
+
+            if ($this->_cacheEnable)
+            {
+                $this->_cache->set($username,$accountData,self::CACHE_USER_TYPE);
+            }
+
+            $account = new ResponseAccount($accountData);
+        }
 
         /**
          * Set by Instagram account media paramaters
@@ -133,15 +170,16 @@ class Instagram
 
         $next_max_id = null;
         $items = [];
-
+        $items = [];
         try{
             do {
 
                 $this->_requestMedia->setLimit($mediaLimit);
                 $this->_requestMedia->setNextMaxId($next_max_id);
 
-                $data = new ResponseMedia($this->_requestMedia->get());
+                $response = $this->_requestMedia->get();
 
+                $data = new ResponseMedia($response);
                 $next_max_id = $data->getNextMaxId();
                 $items = array_merge($items, $data->getItems());
 

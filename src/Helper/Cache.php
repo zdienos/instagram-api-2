@@ -1,6 +1,7 @@
 <?php
 
 namespace Ismailcaakir\Inspublic\Helper;
+use Ismailcaakir\Inspublic\Instagram;
 
 /**
  * Class Cache
@@ -23,11 +24,11 @@ class Cache
 
     /** @var array  */
     private $_types = [
-        "user",
-        "media",
-        "tag",
-        "allmedia",
-        "default"
+        Instagram::CACHE_USER_TYPE,
+        Instagram::CACHE_ALL_MEDIA_TYPE,
+        Instagram::CACHE_MEDIA_TYPE,
+        Instagram::CACHE_TAG_TYPE,
+        Instagram::CACHE_DEFAULT_TYPE
     ];
 
     /**
