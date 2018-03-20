@@ -1,4 +1,4 @@
-# INSTAGRAM PUBLIC PHP
+# INSTAGRAM PUBLIC API PHP
 Instagram public apisini kullanman isteyenler için hazırlanmış php paketi.
 
 **Gereksinimler**
