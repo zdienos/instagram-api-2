@@ -53,33 +53,38 @@ class Account extends Response
         else {
 
             /** Instagram Public API Callback to $account */
-            $account = $responseData->graphql->user;
+            if (isset($responseData->graphql->user))
+            {
+                $account = $responseData->graphql->user;
+            } else if($responseData) {
+                $account = $responseData;
+            }
 
             $this->setStatusCode(200);
-            $this->biography = $account->biography;
-            $this->blocked_by_viewer = $account->blocked_by_viewer;
-            $this->country_block = $account->country_block;
-            $this->external_url = $account->external_url;
-            $this->external_url_linkshimmed = $account->external_url_linkshimmed;
-            $this->follower_count = $account->edge_followed_by->count;
-            $this->following_count = $account->edge_follow->count;
-            $this->followed_by_viewer = $account->followed_by_viewer;
-            $this->follows_viewer = $account->follows_viewer;
-            $this->full_name = $account->full_name;
-            $this->has_blocked_viewer = $account->has_blocked_viewer;
-            $this->has_requested_viewer = $account->has_requested_viewer;
-            $this->id = $account->id;
-            $this->is_private = $account->is_private;
-            $this->is_verified = $account->is_verified;
-            $this->mutual_followers = $account->mutual_followers;
-            $this->profile_pic_url = $account->profile_pic_url;
-            $this->profile_pic_url_hd = $account->profile_pic_url_hd;
-            $this->username = $account->username;
-            $this->media_count = $account->edge_owner_to_timeline_media->count;
+            $this->biography            = isset($account->biography) ? $account->biography : null;
+            $this->blocked_by_viewer    = isset($account->blocked_by_viewer) ? $account->blocked_by_viewer : null;
+            $this->country_block        = isset($account->country_block) ? $account->block_viewer : null;
+            $this->external_url         = isset($account->external_url) ? $account->external_viewer : null;
+            $this->external_url_linkshimmed = isset($account->external_url_linkshimmed) ? $account->external_url_linkshimmed : null;
+            $this->follower_count       = isset($account->edge_followed_by->count) ? $account->edge_followed_by->count : null;
+            $this->following_count      = isset($account->edge_follow->count) ? $account->edge_follow->count : null;
+            $this->followed_by_viewer   = isset($account->followed_by_viewer) ? $account->followed_by_viewer : null;
+            $this->follows_viewer       = isset($account->follows_viewer) ? $account->follows_viewer : null;
+            $this->full_name            = isset($account->full_name) ? $account->full_name : null;
+            $this->has_blocked_viewer   = isset($account->has_blocked_viewer) ? $account->has_blocked_viewer : null;
+            $this->has_requested_viewer = isset($account->has_requested_viewer) ? $account->has_requested_viewer : null;
+            $this->id                   = isset($account->id) ? $account->id : null;
+            $this->is_private           = isset($account->is_private) ? $account->is_private : null;
+            $this->is_verified          = isset($account->is_verified) ? $account->is_verified : null;
+            $this->mutual_followers     = isset($account->mutual_followers) ? $account->mutual_followers : null;
+            $this->profile_pic_url      = isset($account->profile_pic_url) ? $account->profile_pic_url : null;
+            $this->profile_pic_url_hd   = isset($account->profile_pic_url_hd) ? $account->profile_pic_url_hd : null;
+            $this->username             = isset($account->username) ? $account->username : null;
+            $this->media_count          = isset($account->edge_owner_to_timeline_media->count) ? $account->edge_owner_to_timeline_media->count : null;
 
             if ($this->getMediaCount() > 0 && !$this->getIsPrivate()){
 
-                $mediaData = $account->edge_owner_to_timeline_media->edges;
+                $mediaData = count($account->edge_owner_to_timeline_media->edges > 0) ? $account->edge_owner_to_timeline_media->edges : array();
 
                 foreach ($mediaData as $index => $media)
                 {

@@ -12,7 +12,7 @@ namespace Ismailcaakir\Inspublic\Response;
 class MediaItem
 {
 
-    protected $__typename = null;
+    protected $type = null;
     protected $id = null;
     protected $caption = null;
     protected $shortcode = null;
@@ -28,6 +28,7 @@ class MediaItem
     protected $thumbnail_xlarge = null;
     protected $is_video = null;
     protected $video_view_count = null;
+    protected $video_url = null;
 
     /**
      * Media constructor.
@@ -35,63 +36,40 @@ class MediaItem
     public function __construct($item)
     {
 
-        $this->__typename = $item->__typename;
-        $this->id = $item->id;
-        $this->shortcode = $item->shortcode;
-        $this->comment_count = $item->edge_media_to_comment->count;
-        $this->comments_disabled = $item->comments_disabled;
-        $this->timestamp = $item->taken_at_timestamp;
-        $this->display_url = $item->display_url;
-        $this->dimensionH = $item->dimensions->height;
-        $this->dimensionW = $item->dimensions->width;
-
-
-        if (isset($item->edge_liked_by->count))
+        $this->type   = isset($item->__typename) ? $item->__typename : null;
+        $this->id           = isset($item->id) ? $item->id : null;
+        $this->timestamp    = isset($item->taken_at_timestamp) ? $item->taken_at_timestamp : null;
+        $this->display_url  = isset($item->display_url) ? $item->display_url : null;
+        $this->dimensionH   = isset($item->dimensions->height) ? $item->dimensions->height : null;
+        $this->dimensionW   = isset($item->dimensions->width) ? $item->dimensions->width : null;
+        $this->liked_count  = isset($item->edge_liked_by->count) ? $item->edge_liked_by->count : null;
+        $this->liked_count  = isset($item->edge_media_preview_like->count) ? $item->edge_media_preview_like->count : null;
+        $this->caption      = isset($item->edge_media_to_caption->edges[0]->node->text) ? $item->edge_media_to_caption->edges[0]->node->text : null;
+        $this->shortcode    = isset($item->shortcode) ? $item->shortcode : null;
+        $this->comment_count     = isset($item->edge_media_to_comment->count) ? $item->edge_media_to_comment->count : null;
+        $this->comments_disabled = isset($item->comments_disabled) ? $item->comments_disabled : null;
+        if (isset($item->thumbnail_resources))
         {
-            $this->liked_count = $item->edge_liked_by->count;
+            // TIMELINE MEDIA TYPE
+            $this->thumbnail_small      = isset($item->thumbnail_resources[0]) ? $item->thumbnail_resources[0]->src : null;
+            $this->thumbnail_medium     = isset($item->thumbnail_resources[1]) ? $item->thumbnail_resources[1]->src : null;
+            $this->thumbnail_normal     = isset($item->thumbnail_resources[2]) ? $item->thumbnail_resources[2]->src : null;
+            $this->thumbnail_large      = isset($item->thumbnail_resources[3]) ? $item->thumbnail_resources[3]->src : null;
+            $this->thumbnail_xlarge     = isset($item->thumbnail_resources[4]) ? $item->thumbnail_resources[4]->src : null;
+        }
+        else {
+            // MEDIA INFO TYPE
+            $this->thumbnail_small      = isset($item->display_resources[0]) ? $item->display_resources[0]->src : null;
+            $this->thumbnail_medium     = isset($item->display_resources[1]) ? $item->display_resources[1]->src : null;
+            $this->thumbnail_normal     = isset($item->display_resources[2]) ? $item->display_resources[2]->src : null;
+            $this->thumbnail_large      = isset($item->display_resources[3]) ? $item->display_resources[3]->src : null;
+            $this->thumbnail_xlarge     = isset($item->display_resources[4]) ? $item->display_resources[4]->src : null;
         }
 
-        if (isset($item->edge_media_preview_like->count))
-        {
-            $this->liked_count = $item->edge_media_preview_like->count;
-        }
-
-        if (isset($item->edge_media_to_caption->edges[0]))
-        {
-            $this->caption = $item->edge_media_to_caption->edges[0]->node->text;
-        }
-
-        if (isset($item->thumbnail_resources[0]))
-        {
-            $this->thumbnail_small  = $item->thumbnail_resources[0]->src;
-        }
-
-        if (isset($item->thumbnail_resources[1]))
-        {
-            $this->thumbnail_medium = $item->thumbnail_resources[1]->src;
-        }
-
-        if (isset($item->thumbnail_resources[2]))
-        {
-            $this->thumbnail_normal = $item->thumbnail_resources[2]->src;
-        }
-
-        if (isset($item->thumbnail_resources[3]))
-        {
-            $this->thumbnail_large = $item->thumbnail_resources[3]->src;
-        }
-
-        if (isset($item->thumbnail_resources[5]))
-        {
-            $this->thumbnail_xlarge  = $item->thumbnail_resources[5]->src;
-        }
-
-        $this->is_video = $item->is_video;
-
-        if ($this->getIsVideo())
-        {
-            $this->video_view_count = $item->video_view_count;
-        }
+        $this->is_video = isset($item->is_video) ? $item->is_video : null;
+        $this->video_view_count = isset($item->video_view_count) ? $item->video_view_count : null;
+        $this->video_url = isset($item->video_url) ? $item->video_url : null;
+        $this->owner = isset($item->owner) ? new Account($item->owner) : null;
 
     }
 
@@ -122,9 +100,9 @@ class MediaItem
     /**
      * @return mixed
      */
-    public function getTypename()
+    public function getType()
     {
-        return $this->__typename;
+        return $this->type;
     }
 
     /**
@@ -237,5 +215,21 @@ class MediaItem
     public function getVideoViewCount()
     {
         return $this->video_view_count;
+    }
+
+    /**
+     * @return null
+     */
+    public function getVideoUrl()
+    {
+        return $this->video_url;
+    }
+
+    /**
+     * @return Account|null
+     */
+    public function getOwner(): ?Account
+    {
+        return $this->owner;
     }
 }
