@@ -1,6 +1,9 @@
 {
     "name": "ismailcaakir/inspublic",
-    "description": "Instagram Public API Interface",
+    "description": "Instagram Public API Class",
+    "keywords": ["instagram", "public","api","rest","class"],
+    "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "İsmail Çakır",
