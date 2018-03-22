@@ -9,6 +9,10 @@ use Ismailcaakir\Inspublic\Response\Account as ResponseAccount;
 use Ismailcaakir\Inspublic\Request\Media as RequestMedia;
 use Ismailcaakir\Inspublic\Response\Media as ResponseMedia;
 
+use Ismailcaakir\Inspublic\Request\MediaItem as RequestMediaItem;
+use Ismailcaakir\Inspublic\Response\MediaItem as ResponseMediaItem;
+use Ismailcaakir\Inspublic\Response\MediaItem;
+
 class Instagram
 {
 
@@ -17,7 +21,7 @@ class Instagram
 
 
     /** @var bool $_cacheEnable */
-    protected $_cacheEnable = true;
+    protected $_cacheEnable = false;
 
     /** CACHE USER TYPE STRING */
     const CACHE_USER_TYPE   = "user";
@@ -42,6 +46,7 @@ class Instagram
     {
         $this->_requestAccount = new RequestAccount();
         $this->_requestMedia = new RequestMedia();
+        $this->_requestMediaItem = new RequestMediaItem();
         $this->_cache = new Cache();
     }
 
@@ -170,7 +175,6 @@ class Instagram
 
         $next_max_id = null;
         $items = [];
-        $items = [];
         try{
             do {
 
@@ -178,7 +182,6 @@ class Instagram
                 $this->_requestMedia->setNextMaxId($next_max_id);
 
                 $response = $this->_requestMedia->get();
-
                 $data = new ResponseMedia($response);
                 $next_max_id = $data->getNextMaxId();
                 $items = array_merge($items, $data->getItems());
@@ -189,6 +192,24 @@ class Instagram
         }
 
         return $items;
+    }
+
+
+    public function getMedia($code = null)
+    {
+        if (!$code)
+        {
+            throw new \Exception("Code is null");
+        }
+
+        $this->_requestMediaItem->setShortCode($code);
+
+        $data = $this->_requestMediaItem->get();
+
+        $response = new MediaItem($data->graphql->shortcode_media);
+
+        return $response;
+
     }
 
 
