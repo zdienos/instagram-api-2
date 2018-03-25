@@ -11,6 +11,7 @@ namespace Ismailcaakir\InstagramAPI\Response;
 
 class MediaItem
 {
+    use \Ismailcaakir\InstagramAPI\Helper\Downloadable;
 
     protected $type = null;
     protected $id = null;
@@ -29,6 +30,8 @@ class MediaItem
     protected $is_video = null;
     protected $video_view_count = null;
     protected $video_url = null;
+    protected $url = null;
+    protected $instagramMediaUrl = "https://www.instagram.com/p/";
 
     /**
      * Media constructor.
@@ -46,6 +49,7 @@ class MediaItem
         $this->liked_count  = isset($item->edge_media_preview_like->count) ? $item->edge_media_preview_like->count : null;
         $this->caption      = isset($item->edge_media_to_caption->edges[0]->node->text) ? $item->edge_media_to_caption->edges[0]->node->text : null;
         $this->shortcode    = isset($item->shortcode) ? $item->shortcode : null;
+        $this->url          = isset($item->shortcode) ? $this->instagramMediaUrl . $item->shortcode . "/" : null;
         $this->comment_count     = isset($item->edge_media_to_comment->count) ? $item->edge_media_to_comment->count : null;
         $this->comments_disabled = isset($item->comments_disabled) ? $item->comments_disabled : null;
         if (isset($item->thumbnail_resources))
@@ -232,4 +236,13 @@ class MediaItem
     {
         return $this->owner;
     }
+
+    /**
+     * @return null
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
 }

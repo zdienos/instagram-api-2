@@ -17,8 +17,8 @@ class Instagram
 {
 
     protected $_requestAccount;
-    protected $_requestMedia;
 
+    protected $_requestMedia;
 
     /** @var bool $_cacheEnable */
     protected $_cacheEnable = false;

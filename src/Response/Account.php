@@ -63,8 +63,8 @@ class Account extends Response
             $this->setStatusCode(200);
             $this->biography            = isset($account->biography) ? $account->biography : null;
             $this->blocked_by_viewer    = isset($account->blocked_by_viewer) ? $account->blocked_by_viewer : null;
-            $this->country_block        = isset($account->country_block) ? $account->block_viewer : null;
-            $this->external_url         = isset($account->external_url) ? $account->external_viewer : null;
+            $this->block_viewer         = isset($account->block_viewer) ? $account->block_viewer : null;
+            $this->external_url         = isset($account->external_url) ? $account->external_url : null;
             $this->external_url_linkshimmed = isset($account->external_url_linkshimmed) ? $account->external_url_linkshimmed : null;
             $this->follower_count       = isset($account->edge_followed_by->count) ? $account->edge_followed_by->count : null;
             $this->following_count      = isset($account->edge_follow->count) ? $account->edge_follow->count : null;
