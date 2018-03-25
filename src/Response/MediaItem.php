@@ -6,7 +6,7 @@
  * Time: 21:41
  */
 
-namespace Ismailcaakir\Inspublic\Response;
+namespace Ismailcaakir\InstagramAPI\Response;
 
 
 class MediaItem

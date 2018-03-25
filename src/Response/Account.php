@@ -6,13 +6,13 @@
  * Time: 00:00
  */
 
-namespace Ismailcaakir\Inspublic\Response;
+namespace Ismailcaakir\InstagramAPI\Response;
 
-use Ismailcaakir\Inspublic\Response\MediaItem as MediaItemResponse;
+use Ismailcaakir\InstagramAPI\Response\MediaItem as MediaItemResponse;
 
 /**
  * Class Account
- * @package Ismailcaakir\Inspublic\Response
+ * @package Ismailcaakir\InstagramAPI\Response
  */
 class Account extends Response
 {

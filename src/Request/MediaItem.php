@@ -6,7 +6,7 @@
  * Time: 01:32
  */
 
-namespace Ismailcaakir\Inspublic\Request;
+namespace Ismailcaakir\InstagramAPI\Request;
 
 
 class MediaItem extends Request

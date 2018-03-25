@@ -6,7 +6,7 @@
  * Time: 23:24
  */
 
-namespace Ismailcaakir\Inspublic\Request;
+namespace Ismailcaakir\InstagramAPI\Request;
 
 
 class Request

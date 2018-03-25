@@ -6,7 +6,7 @@
  * Time: 02:04
  */
 
-namespace Ismailcaakir\Inspublic\Response;
+namespace Ismailcaakir\InstagramAPI\Response;
 
 
 class Media extends Response

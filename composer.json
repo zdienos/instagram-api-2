@@ -18,7 +18,7 @@
     "require-dev": {},
     "autoload": {
         "psr-4": {
-            "Ismailcaakir\\Inspublic\\": "src"
+            "Ismailcaakir\\InstagramAPI\\": "src"
         }
     }
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace Ismailcaakir\Inspublic\Helper;
-use Ismailcaakir\Inspublic\Instagram;
+namespace Ismailcaakir\InstagramAPI\Helper;
+use Ismailcaakir\InstagramAPI\Instagram;
 
 /**
  * Class Cache
  *
- * Inspublic paketine ozel cache yonetim classi
+ * InstagramAPI paketine ozel cache yonetim classi
  * @alert Bu Class ile pakete ait veriler dosya olarak tutulur. Class sadece pakete ozel olarak gelistirilmistir.
  * @author github.com/ismailcaakir
- * @package Ismailcaakir\Inspublic
+ * @package Ismailcaakir\InstagramAPI
  */
 class Cache
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ismailcaakir\Inspublic\Test;
+namespace Ismailcaakir\InstagramAPI\Test;
 
 class InstagramTest{
 

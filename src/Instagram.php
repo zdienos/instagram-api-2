@@ -1,17 +1,17 @@
 <?php
 
-namespace Ismailcaakir\Inspublic;
+namespace Ismailcaakir\InstagramAPI;
 
-use Ismailcaakir\Inspublic\Helper\Cache;
-use Ismailcaakir\Inspublic\Request\Account as RequestAccount;
-use Ismailcaakir\Inspublic\Response\Account as ResponseAccount;
+use Ismailcaakir\InstagramAPI\Helper\Cache;
+use Ismailcaakir\InstagramAPI\Request\Account as RequestAccount;
+use Ismailcaakir\InstagramAPI\Response\Account as ResponseAccount;
 
-use Ismailcaakir\Inspublic\Request\Media as RequestMedia;
-use Ismailcaakir\Inspublic\Response\Media as ResponseMedia;
+use Ismailcaakir\InstagramAPI\Request\Media as RequestMedia;
+use Ismailcaakir\InstagramAPI\Response\Media as ResponseMedia;
 
-use Ismailcaakir\Inspublic\Request\MediaItem as RequestMediaItem;
-use Ismailcaakir\Inspublic\Response\MediaItem as ResponseMediaItem;
-use Ismailcaakir\Inspublic\Response\MediaItem;
+use Ismailcaakir\InstagramAPI\Request\MediaItem as RequestMediaItem;
+use Ismailcaakir\InstagramAPI\Response\MediaItem as ResponseMediaItem;
+use Ismailcaakir\InstagramAPI\Response\MediaItem;
 
 class Instagram
 {

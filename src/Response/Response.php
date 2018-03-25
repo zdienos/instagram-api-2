@@ -6,7 +6,7 @@
  * Time: 00:00
  */
 
-namespace Ismailcaakir\Inspublic\Response;
+namespace Ismailcaakir\InstagramAPI\Response;
 
 
 class Response
