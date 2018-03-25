@@ -1,7 +1,7 @@
 {
-    "name": "ismailcaakir/inspublic",
-    "description": "Instagram Public API Class",
-    "keywords": ["instagram", "public","api","rest","class"],
+    "name": "ismailcaakir/instagram-api",
+    "description": "Instagram's Public API for PHP",
+    "keywords": ["Instagram", "Public","API","Rest","Class","PHP"],
     "license": "MIT",
     "type": "library",
     "authors": [

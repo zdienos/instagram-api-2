@@ -86,6 +86,7 @@ class Instagram
     }
 
     /**
+     * Username ait mediaları getirir.
      * @param string $username
      * @param string $nextMaxId
      * @return ResponseMedia
@@ -135,6 +136,7 @@ class Instagram
     }
 
     /**
+     * Username ait bütün medyaları getirir.
      * @param null $username
      * @return array
      * @throws \Exception
@@ -194,7 +196,12 @@ class Instagram
         return $items;
     }
 
-
+    /**
+     * Media bilgilerini getirir
+     * @param null|string $code
+     * @return MediaItem
+     * @throws \Exception
+     */
     public function getMedia($code = null)
     {
         if (!$code)
@@ -211,11 +218,6 @@ class Instagram
         return $response;
 
     }
-
-
-
-
-
 
 
 }
