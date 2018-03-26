@@ -17,7 +17,7 @@ trait Downloadable
 
     protected $_prefixFolder = null;
 
-    protected $_storage = "storage";
+    protected $_storage = null;
 
     protected $_storageType = null;
 
@@ -33,7 +33,7 @@ trait Downloadable
         {
             $this->_storage = realpath('.').DIRECTORY_SEPARATOR.$this->_setting->_storage["realpath"];
         } else {
-            $this->_storage = dirname( __DIR__,1).DIRECTORY_SEPARATOR.$this->_storage;
+            $this->_storage = dirname( __DIR__,1).DIRECTORY_SEPARATOR."storage";
         }
 
         /** prefix folder kullanıcı id'sine göre oluşturulur */
@@ -214,7 +214,11 @@ trait Downloadable
         return is_dir($this->_storage.DIRECTORY_SEPARATOR.$this->_prefixFolder);
     }
 
-
+    /**
+     * Dosya daha önceden indirildimi kontrolünü sağlar.
+     * @param $fileName
+     * @return bool
+     */
     private function hasFile($fileName)
     {
         return file_exists($fileName);

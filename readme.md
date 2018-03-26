@@ -4,7 +4,7 @@ Instagram public apisini kullanmak isteyenler için hazırlanmış php paketi.
 **Gereksinimler**
   - PHP 7.1.* >
   - Curl
-  - Cache Sistemi için cache klasörüne okuma yazma oluşturma izinleri.
+  - Cache ve İndirme işlemleri için klasör/dosya okuma yazma oluşturma izinleri.
   - Uzak sunucudan dosya indirme ( php copy() fonksiyonunun izinleri )
   
 ### Instagram Public API Nedir?

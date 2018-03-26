@@ -5,7 +5,8 @@
  */
 namespace Ismailcaakir\InstagramAPI;
 
-use Ismailcaakir\InstagramAPI\Helper\Cache;
+use Ismailcaakir\InstagramAPI\Config\Setting as Setting;
+use Ismailcaakir\InstagramAPI\Helper\Cache as Cache;
 use Ismailcaakir\InstagramAPI\Request\Account as RequestAccount;
 use Ismailcaakir\InstagramAPI\Response\Account as ResponseAccount;
 
@@ -14,7 +15,6 @@ use Ismailcaakir\InstagramAPI\Response\Media as ResponseMedia;
 
 use Ismailcaakir\InstagramAPI\Request\MediaItem as RequestMediaItem;
 use Ismailcaakir\InstagramAPI\Response\MediaItem as ResponseMediaItem;
-use Ismailcaakir\InstagramAPI\Response\MediaItem;
 
 /**
  * Class Instagram
@@ -55,6 +55,7 @@ class Instagram
         $this->_requestMedia = new RequestMedia();
         $this->_requestMediaItem = new RequestMediaItem();
         $this->_cache = new Cache();
+        $this->_setting = new Setting();
     }
 
     /**
@@ -224,6 +225,49 @@ class Instagram
 
         return $response;
 
+    }
+
+
+    /**
+     * Storage dosyalarını temizler
+     * @userId username id yazıldığı takdirde sadece o kullanıcıya ait verileri siler.
+     * @param null|string $userId
+     * @param bool $keepRootFolder
+     * @return bool
+     */
+    public function flushStorage($userId = null,$keepRootFolder = false)
+    {
+
+        if (!is_null($this->_setting->_storage["realpath"]) && isset($this->_setting->_storage["realpath"]))
+        {
+            $storageDir = realpath('.').DIRECTORY_SEPARATOR.$this->_setting->_storage["realpath"];
+        } else {
+            $storageDir = dirname( __DIR__,1).DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."storage";
+        }
+
+        if (isset($userId) && !is_null($userId))
+        {
+            $storageDir = $storageDir.DIRECTORY_SEPARATOR.$userId;
+        }
+
+        if (empty($storageDir) || !file_exists($storageDir)) {
+            return true; // No such file/folder exists.
+        } elseif (is_file($storageDir) || is_link($storageDir)) {
+            return @unlink($storageDir); // Delete file/link.
+        }
+
+        $files = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($storageDir, \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        foreach ($files as $fileinfo) {
+            $action = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+            if (!@$action($fileinfo->getRealPath())) {
+                return false;
+            }
+        }
+        // Delete the root folder itself?
+        return !$keepRootFolder ? @rmdir($storageDir) : true;
     }
 
 
