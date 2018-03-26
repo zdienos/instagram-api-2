@@ -1,20 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ismail
- * Date: 25.03.2018
- * Time: 17:38
- */
 
 namespace Ismailcaakir\InstagramAPI\Helper;
 
 
+use Ismailcaakir\InstagramAPI\Config\Setting;
 use Ismailcaakir\InstagramAPI\Response\Media;
 use Ismailcaakir\InstagramAPI\Response\MediaItem;
 use Ismailcaakir\InstagramAPI\Instagram;
 
 trait Downloadable
 {
+
+    protected $_setting = null;
 
     protected $_file = null;
 
@@ -26,6 +23,26 @@ trait Downloadable
 
     protected $_mediaRequest = null;
 
+    private function _traitInit()
+    {
+
+        $this->_setting = new Setting();
+
+        /** depolamak için kullanılan ana dizin oluşturulur. */
+        if (isset($this->_setting->_storage["realpath"]) && !is_null($this->_setting->_storage["realpath"]))
+        {
+            $this->_storage = realpath('.').DIRECTORY_SEPARATOR.$this->_setting->_storage["realpath"];
+        } else {
+            $this->_storage = dirname( __DIR__,1).DIRECTORY_SEPARATOR.$this->_storage;
+        }
+
+        /** prefix folder kullanıcı id'sine göre oluşturulur */
+        $this->_prefixFolder = $this->getOwner()->getId();
+
+        /** storage type gelen media datasının türüne göre klasörlenir */
+        $this->_storageType = $this->getType();
+    }
+
     /**
      * Dosyayı sunucuya indirmek için hazırlar.
      * @return null|string
@@ -33,7 +50,7 @@ trait Downloadable
      */
     public function download()
     {
-        $this->_storage = dirname( __DIR__,1).DIRECTORY_SEPARATOR.$this->_storage;
+        $this->_traitInit();
 
         switch ($this->getType())
         {
@@ -63,10 +80,6 @@ trait Downloadable
 
         $this->_file = $this->getDisplayUrl();
 
-        $this->_prefixFolder = $this->getOwner()->getId();
-
-        $this->_storageType = $this->getType();
-
         return $this->save();
     }
 
@@ -88,10 +101,6 @@ trait Downloadable
         } else {
             $this->_file = $this->findVideoUrl();
         }
-
-        $this->_prefixFolder = $this->getOwner()->getId();
-
-        $this->_storageType = $this->getType();
 
         return $this->save();
     }
@@ -115,11 +124,19 @@ trait Downloadable
         }
 
         $dwFile = $this->_storage.DIRECTORY_SEPARATOR.$this->_prefixFolder.DIRECTORY_SEPARATOR.$this->_storageType.DIRECTORY_SEPARATOR.$this->getShortcode().$this->getFileType();
-        copy($this->_file, $dwFile);
 
-        if (php_sapi_name() == "cli") {
-            echo "dowloanded {$this->getShortcode()} %%%%%%%%%%%% \n";
-            echo "========================= \n";
+        if (!$this->hasFile($dwFile))
+        {
+            copy($this->_file, $dwFile);
+            if (php_sapi_name() == "cli") {
+                echo "dowloanded {$this->getShortcode()} %%%%%%%%%%%% \n";
+                echo "========================= \n";
+            }
+        } else {
+            if (php_sapi_name() == "cli") {
+                echo "file is exists {$this->getShortcode()} %%%%%%%%%%%% \n";
+                echo "========================= \n";
+            }
         }
 
         return $dwFile;
@@ -151,7 +168,7 @@ trait Downloadable
     }
 
     /**
-     * Cache dosyalarinin kaydedilecegi klasoru dondurur.
+     * Storage dosyalarinin kaydedilecegi klasoru dondurur.
      * @return string
      */
     protected function getStorageDir()
@@ -161,7 +178,7 @@ trait Downloadable
     }
 
     /**
-     * $this->getCacheDir fonksiyonu icin olusturulmayan klasoru olusturur.
+     * $this->getStorageDir fonksiyonu icin olusturulmayan klasoru olusturur.
      * @throws \Exception
      */
     private function makeStorageDir()
@@ -189,12 +206,18 @@ trait Downloadable
     }
 
     /**
-     * Cache klasorunun kontrolunu saglar
+     * Storage klasorunun kontrolunu saglar
      * @return bool
      */
     private function checkStorageDir($type = null)
     {
         return is_dir($this->_storage.DIRECTORY_SEPARATOR.$this->_prefixFolder);
+    }
+
+
+    private function hasFile($fileName)
+    {
+        return file_exists($fileName);
     }
     
 }

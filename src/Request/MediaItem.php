@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ismail
- * Date: 18.03.2018
- * Time: 01:32
- */
 
 namespace Ismailcaakir\InstagramAPI\Request;
 

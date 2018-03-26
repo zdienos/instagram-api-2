@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Created by İsmail Çakır
+ * 26.03.2018
+ */
 namespace Ismailcaakir\InstagramAPI;
 
 use Ismailcaakir\InstagramAPI\Helper\Cache;
@@ -13,6 +16,10 @@ use Ismailcaakir\InstagramAPI\Request\MediaItem as RequestMediaItem;
 use Ismailcaakir\InstagramAPI\Response\MediaItem as ResponseMediaItem;
 use Ismailcaakir\InstagramAPI\Response\MediaItem;
 
+/**
+ * Class Instagram
+ * @package Ismailcaakir\InstagramAPI
+ */
 class Instagram
 {
 

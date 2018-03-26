@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ismail
- * Date: 15.03.2018
- * Time: 23:24
- */
 
 namespace Ismailcaakir\InstagramAPI\Request;
 
@@ -41,7 +35,7 @@ class Request
             CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "postman-token: ca9bd67d-63b6-3d87-274b-9174f4105d87"
+                "token: ca9bd67d-63b6-3d87-274b-9174f4105d87"
             ),
         ));
 
