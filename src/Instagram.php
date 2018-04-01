@@ -28,7 +28,7 @@ class Instagram
     protected $_requestMedia;
 
     /** @var bool $_cacheEnable */
-    protected $_cacheEnable = false;
+    protected $_cacheEnable = true;
 
     /** CACHE USER TYPE STRING */
     const CACHE_USER_TYPE   = "user";
@@ -227,7 +227,6 @@ class Instagram
 
     }
 
-
     /**
      * Storage dosyalarını temizler
      * @userId username id yazıldığı takdirde sadece o kullanıcıya ait verileri siler.
@@ -237,7 +236,6 @@ class Instagram
      */
     public function flushStorage($userId = null,$keepRootFolder = false)
     {
-
         if (!is_null($this->_setting->_storage["realpath"]) && isset($this->_setting->_storage["realpath"]))
         {
             $storageDir = realpath('.').DIRECTORY_SEPARATOR.$this->_setting->_storage["realpath"];
@@ -251,9 +249,9 @@ class Instagram
         }
 
         if (empty($storageDir) || !file_exists($storageDir)) {
-            return true; // No such file/folder exists.
+            return true;
         } elseif (is_file($storageDir) || is_link($storageDir)) {
-            return @unlink($storageDir); // Delete file/link.
+            return @unlink($storageDir);
         }
 
         $files = new \RecursiveIteratorIterator(
@@ -266,9 +264,8 @@ class Instagram
                 return false;
             }
         }
-        // Delete the root folder itself?
+
         return !$keepRootFolder ? @rmdir($storageDir) : true;
     }
-
 
 }
