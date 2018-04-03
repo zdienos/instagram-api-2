@@ -5,8 +5,9 @@
  */
 namespace Ismailcaakir\InstagramAPI;
 
+use Stash\Driver\FileSystem;
+use Stash\Pool;
 use Ismailcaakir\InstagramAPI\Config\Setting as Setting;
-use Ismailcaakir\InstagramAPI\Helper\Cache as Cache;
 use Ismailcaakir\InstagramAPI\Request\Account as RequestAccount;
 use Ismailcaakir\InstagramAPI\Response\Account as ResponseAccount;
 
@@ -45,6 +46,9 @@ class Instagram
     /** CACHE DEFAULT TYPE STRING */
     const CACHE_DEFAULT_TYPE  = "default";
 
+    const CACHE_DEFAULT_SEPERATOR = "_";
+
+    const CACHE_DEFAULT_EXPIRES_TIME = 3600;
 
     /**
      * Instagram constructor.
@@ -54,7 +58,7 @@ class Instagram
         $this->_requestAccount = new RequestAccount();
         $this->_requestMedia = new RequestMedia();
         $this->_requestMediaItem = new RequestMediaItem();
-        $this->_cache = new Cache();
+        $this->_cache = new Pool(new FileSystem(array()));
         $this->_setting = new Setting();
     }
 
@@ -70,23 +74,30 @@ class Instagram
             throw new \Exception("Username is null");
         }
 
-        if ($this->_cacheEnable && $this->_cache->has($username,self::CACHE_USER_TYPE))
+        $cacheKey = self::CACHE_USER_TYPE.self::CACHE_DEFAULT_SEPERATOR.$username;
+
+        $cache = $this->_cache->getItem($cacheKey);
+
+        if ($this->_cacheEnable && !$cache->isMiss())
         {
-            return new ResponseAccount($this->_cache->get($username,self::CACHE_USER_TYPE));
+            return new ResponseAccount($this->_cache->getItem($cacheKey)->get());
         }
 
-        /**
-         * Set by Instagram account username
-         */
+        /** Set by Instagram account username */
         $this->_requestAccount->setUsername($username);
-
 
         /** @var  ResponseAccount $response */
         $response = $this->_requestAccount->get();
 
-        if ($this->_cacheEnable)
+        if($this->_cacheEnable && $cache->isMiss())
         {
-            $this->_cache->set($username,$response,self::CACHE_USER_TYPE);
+            $cache->lock();
+
+            $cache->set($response);
+
+            $cache->expiresAfter(self::CACHE_DEFAULT_EXPIRES_TIME);
+
+            $this->_cache->save($cache);
         }
 
         return new ResponseAccount($response);
@@ -106,11 +117,15 @@ class Instagram
             throw new \Exception("Username is null");
         }
 
+        $cacheKey = self::CACHE_USER_TYPE.self::CACHE_DEFAULT_SEPERATOR.$username;
+
+        $cache = $this->_cache->getItem($cacheKey);
+
         $mediaLimit = 20;
 
-        if ($this->_cacheEnable && $this->_cache->has($username,self::CACHE_USER_TYPE))
+        if ($this->_cacheEnable && !$cache->isMiss())
         {
-            $account = new ResponseAccount($this->_cache->get($username,self::CACHE_USER_TYPE));
+            $account = new ResponseAccount($cache->get());
         } else {
 
             /**
@@ -121,15 +136,19 @@ class Instagram
             /** @var  ResponseAccount $account */
             $accountData = $this->_requestAccount->get();
 
-            if ($this->_cacheEnable)
+            if($this->_cacheEnable && $cache->isMiss())
             {
-                $this->_cache->set($username,$accountData,self::CACHE_USER_TYPE);
+                $cache->lock();
+
+                $cache->set($accountData);
+
+                $cache->expiresAfter(self::CACHE_DEFAULT_EXPIRES_TIME);
+
+                $this->_cache->save($cache);
             }
 
             $account = new ResponseAccount($accountData);
         }
-
-
 
         /**
          * Set by Instagram account media paramaters
@@ -155,11 +174,15 @@ class Instagram
             throw new \Exception("Username is null");
         }
 
+        $cacheKey = self::CACHE_USER_TYPE.self::CACHE_DEFAULT_SEPERATOR.$username;
+
+        $cache = $this->_cache->getItem($cacheKey);
+
         $mediaLimit = 200;
 
-        if ($this->_cacheEnable && $this->_cache->has($username,self::CACHE_USER_TYPE))
+        if ($this->_cacheEnable && !$cache->isMiss())
         {
-            $account = new ResponseAccount($this->_cache->get($username,self::CACHE_USER_TYPE));
+            $account = new ResponseAccount($cache->get());
         } else {
 
             /**
@@ -170,9 +193,15 @@ class Instagram
             /** @var  ResponseAccount $account */
             $accountData = $this->_requestAccount->get();
 
-            if ($this->_cacheEnable)
+            if($this->_cacheEnable && $cache->isMiss())
             {
-                $this->_cache->set($username,$accountData,self::CACHE_USER_TYPE);
+                $cache->lock();
+
+                $cache->set($accountData);
+
+                $cache->expiresAfter(self::CACHE_DEFAULT_EXPIRES_TIME);
+
+                $this->_cache->save($cache);
             }
 
             $account = new ResponseAccount($accountData);
